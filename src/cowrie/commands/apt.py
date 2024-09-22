@@ -3,8 +3,6 @@
 
 
 from __future__ import annotations
-
-import random
 import re
 from typing import Any
 from collections.abc import Callable
@@ -13,6 +11,7 @@ from twisted.internet import defer, reactor
 from twisted.internet.defer import inlineCallbacks
 
 from cowrie.shell.command import HoneyPotCommand
+import secrets
 
 commands = {}
 
@@ -52,7 +51,7 @@ class Command_aptget(HoneyPotCommand):
     def sleep(self, time: float, time2: float | None = None) -> defer.Deferred:
         d: defer.Deferred = defer.Deferred()
         if time2:
-            time = random.randint(int(time * 100), int(time2 * 100.0)) / 100.0
+            time = secrets.SystemRandom().randint(int(time * 100), int(time2 * 100.0)) / 100.0
         reactor.callLater(time, d.callback, None)  # type: ignore[attr-defined]
         return d
 
@@ -125,16 +124,16 @@ pages for more information and options.
     def do_install(self, *args):
         if len(self.args) <= 1:
             msg = "0 upgraded, 0 newly installed, 0 to remove and {0} not upgraded.\n"
-            self.write(msg.format(random.randint(200, 300)))
+            self.write(msg.format(secrets.SystemRandom().randint(200, 300)))
             self.exit()
             return
 
         for y in [re.sub("[^A-Za-z0-9]", "", x) for x in self.args[1:]]:
             self.packages[y] = {
                 "version": "{}.{}-{}".format(
-                    random.choice([0, 1]), random.randint(1, 40), random.randint(1, 10)
+                    secrets.choice([0, 1]), secrets.SystemRandom().randint(1, 40), secrets.SystemRandom().randint(1, 10)
                 ),
-                "size": random.randint(100, 900),
+                "size": secrets.SystemRandom().randint(100, 900),
             }
         totalsize: int = sum(self.packages[x]["size"] for x in self.packages)
 
@@ -182,7 +181,7 @@ pages for more information and options.
             self.write(
                 "Setting up {} ({}) ...\n".format(p, self.packages[p]["version"])
             )
-            self.fs.mkfile("/usr/bin/%s" % p, 0, 0, random.randint(10000, 90000), 33188)
+            self.fs.mkfile("/usr/bin/%s" % p, 0, 0, secrets.SystemRandom().randint(10000, 90000), 33188)
             self.protocol.commands[
                 "/usr/bin/%s" % p
             ] = Command_faked_package_class_factory.getCommand(p)

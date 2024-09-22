@@ -30,7 +30,6 @@
 from __future__ import annotations
 
 import json
-import random
 from configparser import NoOptionError
 
 from twisted.cred.portal import IRealm
@@ -38,6 +37,7 @@ from twisted.python import log
 
 from cowrie.core.config import CowrieConfig
 from cowrie.shell import fs
+import secrets
 
 
 class CowrieServer:
@@ -58,7 +58,7 @@ class CowrieServer:
             arches = [
                 arch.strip() for arch in CowrieConfig.get("shell", "arch").split(",")
             ]
-            self.arch = random.choice(arches)
+            self.arch = secrets.choice(arches)
         except NoOptionError:
             self.arch = "linux-x64-lsb"
 

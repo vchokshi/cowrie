@@ -29,12 +29,12 @@
 
 from __future__ import annotations
 from binascii import crc32
-from random import randint, seed
 from typing import Any
 
 from twisted.python import log
 
 from cowrie.core.config import CowrieConfig
+import secrets
 
 
 class Passwd:
@@ -134,7 +134,7 @@ class Passwd:
 
         # ensure consistent uid and gid
         seed_id = crc32(name.encode("utf-8"))
-        seed(seed_id)
+        secrets.SystemRandom().seed(seed_id)
 
         e: dict[str, Any] = {}
         e["pw_name"] = name
@@ -142,7 +142,7 @@ class Passwd:
         e["pw_gecos"] = 0
         e["pw_dir"] = "/home/" + name
         e["pw_shell"] = "/bin/bash"
-        e["pw_uid"] = randint(1500, 10000)
+        e["pw_uid"] = secrets.SystemRandom().randint(1500, 10000)
         e["pw_gid"] = e["pw_uid"]
         self.passwd.append(e)
         return e

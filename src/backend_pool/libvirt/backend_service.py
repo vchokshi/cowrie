@@ -8,7 +8,6 @@ backend service
 from __future__ import annotations
 
 import os
-import random
 import sys
 import uuid
 from collections.abc import Callable
@@ -20,6 +19,7 @@ from cowrie.core.config import CowrieConfig
 import backend_pool.libvirt.guest_handler
 import backend_pool.libvirt.network_handler
 import backend_pool.util
+import secrets
 
 
 class LibvirtError(Exception):
@@ -53,7 +53,7 @@ class LibvirtBackendService:
         self.ready: bool = False
 
         # table to associate IPs and MACs
-        seed: int = random.randint(0, sys.maxsize)
+        seed: int = secrets.SystemRandom().randint(0, sys.maxsize)
         self.network_table = backend_pool.util.generate_network_table(seed)
 
         log.msg(
@@ -103,7 +103,7 @@ class LibvirtBackendService:
         # Try to find a free pair 500 times.
         retries = 0
         while retries < 500:
-            mac = random.choice(list(self.network_table.keys()))
+            mac = secrets.choice(list(self.network_table.keys()))
             ip = self.network_table[mac]
             if ip_tester(ip):
                 return mac, ip

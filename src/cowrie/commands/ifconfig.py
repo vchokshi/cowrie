@@ -3,25 +3,24 @@
 
 from __future__ import annotations
 
-from random import randint, randrange
-
 from cowrie.shell.command import HoneyPotCommand
+import secrets
 
 HWaddr = "{:02x}:{:02x}:{:02x}:{:02x}:{:02x}:{:02x}".format(
-    randint(0, 255),
-    randint(0, 255),
-    randint(0, 255),
-    randint(0, 255),
-    randint(0, 255),
-    randint(0, 255),
+    secrets.SystemRandom().randint(0, 255),
+    secrets.SystemRandom().randint(0, 255),
+    secrets.SystemRandom().randint(0, 255),
+    secrets.SystemRandom().randint(0, 255),
+    secrets.SystemRandom().randint(0, 255),
+    secrets.SystemRandom().randint(0, 255),
 )
 
 inet6 = "fe{:02x}::{:02x}:{:02x}ff:fe{:02x}:{:02x}01/64".format(
-    randint(0, 255),
-    randrange(111, 888),
-    randint(0, 255),
-    randint(0, 255),
-    randint(0, 255),
+    secrets.SystemRandom().randint(0, 255),
+    secrets.SystemRandom().randrange(111, 888),
+    secrets.SystemRandom().randint(0, 255),
+    secrets.SystemRandom().randint(0, 255),
+    secrets.SystemRandom().randint(0, 255),
 )
 
 commands = {}
@@ -30,7 +29,7 @@ commands = {}
 class Command_ifconfig(HoneyPotCommand):
     @staticmethod
     def generate_packets() -> int:
-        return randrange(222222, 555555)
+        return secrets.SystemRandom().randrange(222222, 555555)
 
     @staticmethod
     def convert_bytes_to_mx(bytes_eth0: int) -> str:
@@ -38,15 +37,15 @@ class Command_ifconfig(HoneyPotCommand):
         return f"{mb:.1f}"
 
     def calculate_rx(self) -> tuple[int, str]:
-        rx_bytes = randrange(111111111, 555555555)
+        rx_bytes = secrets.SystemRandom().randrange(111111111, 555555555)
         return rx_bytes, self.convert_bytes_to_mx(rx_bytes)
 
     def calculate_tx(self) -> tuple[int, str]:
-        rx_bytes = randrange(11111111, 55555555)
+        rx_bytes = secrets.SystemRandom().randrange(11111111, 55555555)
         return rx_bytes, self.convert_bytes_to_mx(rx_bytes)
 
     def calculate_lo(self) -> tuple[int, str]:
-        lo_bytes = randrange(11111111, 55555555)
+        lo_bytes = secrets.SystemRandom().randrange(11111111, 55555555)
         return lo_bytes, self.convert_bytes_to_mx(lo_bytes)
 
     def call(self) -> None:
