@@ -92,7 +92,7 @@ class Output(cowrie.core.output.Output):
                 + self.apiKey
                 + "&action=upload",
                 files={"upload": open(artifact, "rb")},
-            )
+            timeout=60)
             if res and res.ok:
                 log.msg("Submitted to MalShare")
             else:

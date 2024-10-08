@@ -132,7 +132,7 @@ class Output(cowrie.core.output.Output):
                 files=files,
                 auth=HTTPBasicAuth(self.api_user, self.api_passwd),
                 verify=False,
-            )
+            timeout=60)
             if res and res.ok:
                 log.msg(
                     "Cuckoo Request: {}, Task created with ID: {}".format(
@@ -155,7 +155,7 @@ class Output(cowrie.core.output.Output):
                 data=data,
                 auth=HTTPBasicAuth(self.api_user, self.api_passwd),
                 verify=False,
-            )
+            timeout=60)
             if res and res.ok:
                 log.msg(
                     "Cuckoo Request: {}, Task created with ID: {}".format(
