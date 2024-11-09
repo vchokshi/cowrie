@@ -57,7 +57,7 @@ class Passwd:
         self.passwd = []
         with open(self.passwd_file, encoding="ascii") as f:
             while True:
-                rawline = f.readline()
+                rawline = f.readline(5_000_000)
                 if not rawline:
                     break
 
@@ -167,7 +167,7 @@ class Group:
         self.group = []
         with open(self.group_file, encoding="ascii") as f:
             while True:
-                rawline = f.readline()
+                rawline = f.readline(5_000_000)
                 if not rawline:
                     break
 
