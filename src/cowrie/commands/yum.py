@@ -8,7 +8,6 @@
 from __future__ import annotations
 
 import hashlib
-import random
 import re
 from typing import Any
 from collections.abc import Callable
@@ -19,6 +18,7 @@ from twisted.internet.defer import inlineCallbacks
 from twisted.python import log
 
 from cowrie.shell.command import HoneyPotCommand
+import secrets
 
 arch = "x86_64"
 commands = {}
@@ -57,7 +57,7 @@ class Command_yum(HoneyPotCommand):
     def sleep(self, time: float, time2: float | None = None) -> defer.Deferred:
         d: defer.Deferred = defer.Deferred()
         if time2:
-            time = random.randint(int(time * 100), int(time2 * 100)) / 100.0
+            time = secrets.SystemRandom().randint(int(time * 100), int(time2 * 100)) / 100.0
         reactor.callLater(time, d.callback, None)  # type: ignore[attr-defined]
         return d
 
@@ -66,12 +66,12 @@ class Command_yum(HoneyPotCommand):
         self.write(
             "Loaded plugins: changelog, kernel-module, ovl, priorities, tsflags, versionlock\n"
         )
-        randnum = random.randint(100, 900)
-        randnum2 = random.randint(100, 900)
+        randnum = secrets.SystemRandom().randint(100, 900)
+        randnum2 = secrets.SystemRandom().randint(100, 900)
         randhash = hashlib.sha1(f"{randnum}".encode()).hexdigest()
         randhash2 = hashlib.sha1(f"{randnum2}".encode()).hexdigest()
         yield self.sleep(1, 2)
-        self.write(f"Installed: 7/{arch}  {random.randint(500, 800)}:{randhash}\n")
+        self.write(f"Installed: 7/{arch}  {secrets.SystemRandom().randint(500, 800)}:{randhash}\n")
         self.write(f"Group-Installed: yum 13:{randhash2}\n")
         self.write("version\n")
         self.exit()
@@ -203,10 +203,10 @@ Options:
         for y in [re.sub("[^A-Za-z0-9]", "", x) for x in self.args[1:]]:
             self.packages[y] = {
                 "version": "{}.{}-{}".format(
-                    random.choice([0, 1]), random.randint(1, 40), random.randint(1, 10)
+                    secrets.choice([0, 1]), secrets.SystemRandom().randint(1, 40), secrets.SystemRandom().randint(1, 10)
                 ),
-                "size": random.randint(100, 900),
-                "release": f"{random.randint(1, 15)}.el7",
+                "size": secrets.SystemRandom().randint(100, 900),
+                "release": f"{secrets.SystemRandom().randint(1, 15)}.el7",
             }
         totalsize: int = sum(self.packages[x]["size"] for x in self.packages)
         repository = "base"
@@ -218,7 +218,7 @@ Options:
         yield self.sleep(2.2)
         self.write(
             "{} packages excluded due to repository priority protections\n".format(
-                random.randint(200, 300)
+                secrets.SystemRandom().randint(200, 300)
             )
         )
         yield self.sleep(0.9)
@@ -309,7 +309,7 @@ Options:
                 "  {}.{} {}:{}-{} \t\t".format(
                     p,
                     arch,
-                    random.randint(0, 2),
+                    secrets.SystemRandom().randint(0, 2),
                     self.packages[p]["version"],
                     self.packages[p]["release"],
                 )

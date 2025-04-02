@@ -1,7 +1,6 @@
 from __future__ import annotations
 import json
 import string
-from random import choice
 
 from wokkel import muc
 from wokkel.client import XMPPClient
@@ -14,6 +13,7 @@ from twisted.words.protocols.jabber.jid import JID
 
 import cowrie.core.output
 from cowrie.core.config import CowrieConfig
+import secrets
 
 
 class XMPPLoggerProtocol(muc.MUCClient):  # type: ignore
@@ -66,7 +66,7 @@ class Output(cowrie.core.output.Output):
         user = CowrieConfig.get("output_xmpp", "user")
         password = CowrieConfig.get("output_xmpp", "password")
         muc = CowrieConfig.get("output_xmpp", "muc")
-        resource = "".join([choice(string.ascii_letters) for i in range(8)])
+        resource = "".join([secrets.choice(string.ascii_letters) for i in range(8)])
         jid = user + "/" + resource
         application = service.Application("honeypot")
         self.run(application, jid, password, JID(None, [muc, server, None]), server)

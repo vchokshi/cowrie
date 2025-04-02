@@ -11,13 +11,13 @@ import json
 import re
 from collections import OrderedDict
 from os import path
-from random import randint
 from typing import Any
 from re import Pattern
 
 from twisted.python import log
 
 from cowrie.core.config import CowrieConfig
+import secrets
 
 _USERDB_DEFAULTS: list[str] = [
     "root:x:!root",
@@ -201,7 +201,7 @@ class AuthRandom:
                 auth = True
                 self.savevars()
                 return auth
-            ipinfo["max"] = randint(self.mintry, self.maxtry)
+            ipinfo["max"] = secrets.SystemRandom().randint(self.mintry, self.maxtry)
             log.msg("first time for {}, need: {}".format(src_ip, ipinfo["max"]))
         else:
             if userpass in cache:
@@ -218,7 +218,7 @@ class AuthRandom:
 
         # Fill in missing variables
         if "max" not in ipinfo:
-            ipinfo["max"] = randint(self.mintry, self.maxtry)
+            ipinfo["max"] = secrets.SystemRandom().randint(self.mintry, self.maxtry)
         if "try" not in ipinfo:
             ipinfo["try"] = 0
         if "tried" not in ipinfo:

@@ -8,7 +8,6 @@ from __future__ import annotations
 import codecs
 import datetime
 import getopt
-import random
 import re
 import time
 from collections.abc import Callable
@@ -19,6 +18,7 @@ from twisted.python import failure, log
 from cowrie.core import utils
 from cowrie.shell.command import HoneyPotCommand
 from cowrie.shell.honeypot import HoneyPotShell
+import secrets
 
 commands: dict[str, Callable] = {}
 
@@ -302,7 +302,7 @@ class Command_ps(HoneyPotCommand):
                     % str(single_ps["COMMAND"]),
                 )
                 output_array.append(output)
-            process = random.randint(4000, 8000)
+            process = secrets.SystemRandom().randint(4000, 8000)
             output = (
                 "%s".ljust(15 - len("root")) % "root",
                 "%s".ljust(8 - len(str(process))) % str(process),

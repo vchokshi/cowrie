@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import getopt
 import os
-import random
 import re
 import time
 
@@ -13,6 +12,7 @@ from twisted.internet.defer import Deferred
 
 from cowrie.core.config import CowrieConfig
 from cowrie.shell.command import HoneyPotCommand
+import secrets
 
 commands = {}
 
@@ -129,7 +129,7 @@ class Command_gcc(HoneyPotCommand):
 
         # To generate, or not
         if input_files > 0 and complete:
-            timeout = 0.1 + random.random()
+            timeout = 0.1 + secrets.SystemRandom().random()
 
             # Schedule call to make it more time consuming and real
             self.scheduled = reactor.callLater(  # type: ignore[attr-defined]
@@ -200,8 +200,8 @@ gcc version {} (Debian {}-5)""".format(
 
         # Data contains random garbage from an actual file, so when
         # catting the file, you'll see some 'real' compiled data
-        for _i in range(random.randint(3, 15)):
-            if random.randint(1, 3) == 1:
+        for _i in range(secrets.SystemRandom().randint(3, 15)):
+            if secrets.SystemRandom().randint(1, 3) == 1:
                 data = data + Command_gcc.RANDOM_DATA[::-1]
             else:
                 data = data + Command_gcc.RANDOM_DATA
