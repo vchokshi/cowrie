@@ -104,8 +104,7 @@ class Output(cowrie.core.output.Output):
             log.msg(f"Looking for tasks for: {sha256}")
             res = requests.get(
                 urljoin(self.url_base, f"/files/view/sha256/{sha256}".encode()),
-                verify=False,
-                auth=HTTPBasicAuth(self.api_user, self.api_passwd),
+                verify=True, auth=HTTPBasicAuth(self.api_user, self.api_passwd),
                 timeout=60,
             )
             if res and res.ok:
@@ -131,8 +130,7 @@ class Output(cowrie.core.output.Output):
                 urljoin(self.url_base, b"tasks/create/file"),
                 files=files,
                 auth=HTTPBasicAuth(self.api_user, self.api_passwd),
-                verify=False,
-            )
+                verify=True)
             if res and res.ok:
                 log.msg(
                     "Cuckoo Request: {}, Task created with ID: {}".format(
@@ -154,8 +152,7 @@ class Output(cowrie.core.output.Output):
                 urljoin(self.url_base, b"tasks/create/url"),
                 data=data,
                 auth=HTTPBasicAuth(self.api_user, self.api_passwd),
-                verify=False,
-            )
+                verify=True)
             if res and res.ok:
                 log.msg(
                     "Cuckoo Request: {}, Task created with ID: {}".format(
