@@ -42,6 +42,7 @@ from twisted.python import log
 
 import cowrie.core.output
 from cowrie.core.config import CowrieConfig
+from security import safe_requests
 
 
 class Output(cowrie.core.output.Output):
@@ -102,7 +103,7 @@ class Output(cowrie.core.output.Output):
         """
         try:
             log.msg(f"Looking for tasks for: {sha256}")
-            res = requests.get(
+            res = safe_requests.get(
                 urljoin(self.url_base, f"/files/view/sha256/{sha256}".encode()),
                 verify=False,
                 auth=HTTPBasicAuth(self.api_user, self.api_passwd),
