@@ -2,9 +2,9 @@
 
 import datetime
 import json
-import random
 
 import psutil
+import secrets
 
 
 def run():
@@ -51,7 +51,7 @@ def run():
                 object["TTY"] = str(info["terminal"]).replace("/dev/", "")
             else:
                 object["TTY"] = "?"
-            object["STAT"] = random.choice(randomStates)
+            object["STAT"] = secrets.choice(randomStates)
             object["TIME"] = info["cpu_times"].user
             command["command"]["ps"].append(object)
 

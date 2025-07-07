@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import getopt
 import hashlib
-import random
 import re
 import socket
 from typing import Any
@@ -13,6 +12,7 @@ from typing import Any
 from twisted.internet import reactor
 
 from cowrie.shell.command import HoneyPotCommand
+import secrets
 
 commands = {}
 
@@ -89,7 +89,7 @@ class Command_ping(HoneyPotCommand):
         self.count = 0
 
     def showreply(self) -> None:
-        ms = 40 + random.random() * 10
+        ms = 40 + secrets.SystemRandom().random() * 10
         self.write(
             "64 bytes from {} ({}): icmp_seq={} ttl=50 time={:.1f} ms\n".format(
                 self.host, self.ip, self.count + 1, ms

@@ -9,9 +9,9 @@ from __future__ import annotations
 
 
 import os
-import random
 import subprocess
 import time
+import secrets
 
 
 def ping(guest_ip: str) -> int:
@@ -44,7 +44,7 @@ def generate_network_table(seed: int | None = None) -> dict[str, str]:
 
     # we use the seed in case we want to generate the same table twice
     if seed is not None:
-        random.seed(seed)
+        secrets.SystemRandom().seed(seed)
 
     # number of IPs per network is 253 (2-254)
     # generate random MACs, set ensures they are unique
@@ -52,9 +52,9 @@ def generate_network_table(seed: int | None = None) -> dict[str, str]:
     while len(macs) < 253:
         macs.add(
             "48:d2:24:bf:"
-            + to_byte(random.randint(0, 255))
+            + to_byte(secrets.SystemRandom().randint(0, 255))
             + ":"
-            + to_byte(random.randint(0, 255))
+            + to_byte(secrets.SystemRandom().randint(0, 255))
         )
 
     # associate each MAC with a sequential IP
